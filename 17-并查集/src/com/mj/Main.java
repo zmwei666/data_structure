@@ -2,13 +2,7 @@ package com.mj;
 
 import com.mj.tools.Asserts;
 import com.mj.tools.Times;
-import com.mj.union.GenericUnionFind;
-import com.mj.union.UnionFind;
-import com.mj.union.UnionFind_QU_R;
-import com.mj.union.UnionFind_QU_R_PC;
-import com.mj.union.UnionFind_QU_R_PH;
-import com.mj.union.UnionFind_QU_R_PS;
-import com.mj.union.UnionFind_QU_S;
+import com.mj.union.*;
 
 public class Main {
 	static final int count = 1000000;
@@ -18,9 +12,9 @@ public class Main {
 //		testTime(new UnionFind_QU(count));
 //		testTime(new UnionFind_QU_S(count));
 //		testTime(new UnionFind_QU_R(count));
-		testTime(new UnionFind_QU_R_PC(count));
-		testTime(new UnionFind_QU_R_PS(count));
-		testTime(new UnionFind_QU_R_PH(count));
+		testTime(new _06_UnionFind_QU_R_PC(count));
+		testTime(new _07_UnionFind_QU_R_PS(count));
+		testTime(new _08_UnionFind_QU_R_PH(count));
 		testTime(new GenericUnionFind<Integer>());
 		
 //		GenericUnionFind<Student> uf = new GenericUnionFind<>();
@@ -79,7 +73,7 @@ public class Main {
 		});
 	}
 	
-	static void testTime(UnionFind uf) {
+	static void testTime(_01_UnionFind uf) {
 		uf.union(0, 1);
 		uf.union(0, 3);
 		uf.union(0, 4);
