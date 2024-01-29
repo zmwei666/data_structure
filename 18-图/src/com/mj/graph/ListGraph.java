@@ -246,18 +246,24 @@ public class ListGraph<V, E> extends Graph<V, E> {
 		}
 	}
 
+	/**
+	 * 拓扑排序 必须为有向无环图
+	 * <br/>
+	 * <img src="https://gitee.com/codetheory/img-on1/raw/master/img01/1706512572837-2024-1-2915:16:12.png"  />
+	 * C - E 初始度就为0, 则直接进入队列, 不放入入度表
+	 */
 	@Override
 	public List<V> topologicalSort() {
-		List<V> list = new ArrayList<>();
-		Queue<Vertex<V, E>> queue = new LinkedList<>();
-		Map<Vertex<V, E>, Integer> ins = new HashMap<>();
+		List<V> list = new ArrayList<>();  // 存放排序的结果
+		Queue<Vertex<V, E>> queue = new LinkedList<>();  // 存放度为0的节点
+		Map<Vertex<V, E>, Integer> ins = new HashMap<>();  // 入度表, 存放所有节点的入度
 		// 初始化（将度为0的节点都放入队列）
 		vertices.forEach((V v, Vertex<V, E> vertex) -> {
 			int in = vertex.inEdges.size();
 			if (in == 0) {
-				queue.offer(vertex);
+				queue.offer(vertex);  // 如果度为0, 则放入队列
 			} else {
-				ins.put(vertex, in);
+				ins.put(vertex, in);  // 否则, 就放入入度表
 			}
 		});
 		
@@ -267,10 +273,10 @@ public class ListGraph<V, E> extends Graph<V, E> {
 			list.add(vertex.value);
 			
 			for (Edge<V, E> edge : vertex.outEdges) {
-				int toIn = ins.get(edge.to) - 1;
-				if (toIn == 0) {
+				int toIn = ins.get(edge.to) - 1;  // 入度表 当前顶点的to的度数 -1
+				if (toIn == 0) {  // 减完后, 如果度数为0, 就放入队列
 					queue.offer(edge.to);
-				} else {
+				} else {  // 否则, 就更新入度表
 					ins.put(edge.to, toIn);
 				}
 			}
