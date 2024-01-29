@@ -1,21 +1,10 @@
 package com.mj.graph;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Stack;
-
 import com.mj.MinHeap;
 import com.mj.UnionFind;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 @SuppressWarnings("unchecked")
 public class ListGraph<V, E> extends Graph<V, E> {
@@ -24,7 +13,7 @@ public class ListGraph<V, E> extends Graph<V, E> {
 		super(weightManager);
 	}
 
-	private static class Vertex<V, E> {
+	private static class Vertex<V, E> {  // 顶点
 		V value;
 		Set<Edge<V, E>> inEdges = new HashSet<>();
 		Set<Edge<V, E>> outEdges = new HashSet<>();
@@ -45,7 +34,7 @@ public class ListGraph<V, E> extends Graph<V, E> {
 		}
 	}
 	
-	private static class Edge<V, E> {
+	private static class Edge<V, E> { // 边
 		Vertex<V, E> from;
 		Vertex<V, E> to;
 		E weight;
@@ -120,10 +109,10 @@ public class ListGraph<V, E> extends Graph<V, E> {
 
 	@Override
 	public void addEdge(V from, V to, E weight) {
-		Vertex<V, E> fromVertex = vertices.get(from);
-		if (fromVertex == null) {
+		Vertex<V, E> fromVertex = vertices.get(from);  // 从顶点里找from
+		if (fromVertex == null) {  // 如果没有, 就创建一个
 			fromVertex = new Vertex<>(from);
-			vertices.put(from, fromVertex);
+			vertices.put(from, fromVertex);  // 放到顶点里
 		}
 		
 		Vertex<V, E> toVertex = vertices.get(to);
@@ -134,7 +123,10 @@ public class ListGraph<V, E> extends Graph<V, E> {
 
 		Edge<V, E> edge = new Edge<>(fromVertex, toVertex);
 		edge.weight = weight;
-		if (fromVertex.outEdges.remove(edge)) {
+
+		// 为什么不先判断是否存在，然后get这个元素，然后替换
+		// 因为HashSet没有get方法，set只存储key，不存储value
+		if (fromVertex.outEdges.remove(edge)) {  // 如果删除成功, 就说明存在, 那就把to也删掉
 			toVertex.inEdges.remove(edge);
 			edges.remove(edge);
 		}
@@ -145,6 +137,7 @@ public class ListGraph<V, E> extends Graph<V, E> {
 
 	@Override
 	public void removeEdge(V from, V to) {
+		// 确保两个定点都存在
 		Vertex<V, E> fromVertex = vertices.get(from);
 		if (fromVertex == null) return;
 		
@@ -158,16 +151,23 @@ public class ListGraph<V, E> extends Graph<V, E> {
 		}
 	}
 
+	/**
+	 * 删除定点
+	 * <br>
+	 * <img src="https://gitee.com/codetheory/img-on1/raw/master/img01/1706497846712-2024-1-2911:10:46.png"  />
+	 */
 	@Override
 	public void removeVertex(V v) {
-		Vertex<V, E> vertex = vertices.remove(v);
-		if (vertex == null) return;
+		Vertex<V, E> vertex = vertices.remove(v);  // 先删, 如果有, remove会返回删除的value
+		if (vertex == null) return;  // 如果为null, 那就说明不存在, 直接return
 
+		// 这里为什么使用迭代器, 因为这里需要边遍历, 边删除
+		// 删除 outEdges  比如删除 V0 6
 		for (Iterator<Edge<V, E>> iterator = vertex.outEdges.iterator(); iterator.hasNext();) {
-			Edge<V, E> edge = iterator.next();
-			edge.to.inEdges.remove(edge);
+			Edge<V, E> edge = iterator.next();  // 拿到6这条边 V0 -> V4
+			edge.to.inEdges.remove(edge);  // edge.to 是 V4  V4的inEdges是所有指向V4的边  然后remove
 			// 将当前遍历到的元素edge从集合vertex.outEdges中删掉
-			iterator.remove(); 
+			iterator.remove();  // 删除V0的outEdge  -> 6  V0 -> V4
 			edges.remove(edge);
 		}
 
@@ -180,13 +180,19 @@ public class ListGraph<V, E> extends Graph<V, E> {
 		}
 	}
 
+	/**
+	 * 广度优先搜索 会有一些节点访问不到
+	 * @param begin 起点
+	 * <br/>
+	 * <img src="https://gitee.com/codetheory/img-on1/raw/master/img01/1706502804314-2024-1-2912:33:24.png"  />
+	 */
 	@Override
 	public void bfs(V begin, VertexVisitor<V> visitor) {
 		if (visitor == null) return;
 		Vertex<V, E> beginVertex = vertices.get(begin);
 		if (beginVertex == null) return;
 		
-		Set<Vertex<V, E>> visitedVertices = new HashSet<>();
+		Set<Vertex<V, E>> visitedVertices = new HashSet<>();  // 用来存放访问过的节点
 		Queue<Vertex<V, E>> queue = new LinkedList<>();
 		queue.offer(beginVertex);
 		visitedVertices.add(beginVertex);
@@ -198,11 +204,15 @@ public class ListGraph<V, E> extends Graph<V, E> {
 			for (Edge<V, E> edge : vertex.outEdges) {
 				if (visitedVertices.contains(edge.to)) continue;
 				queue.offer(edge.to);
-				visitedVertices.add(edge.to);
+				visitedVertices.add(edge.to);  // 这一行一定要有, 不然有环会出现bug, 比如遍历0, 添加1, 4, 然后遍历1, 又加4 , 此时队列里就有两个4了
 			}
 		}
 	}
 
+	/**
+	 * 深度优先搜索 会有一些节点访问不到
+	 * @param begin 起点
+	 */
 	@Override
 	public void dfs(V begin, VertexVisitor<V> visitor) {
 		if (visitor == null) return;
@@ -589,7 +599,10 @@ public class ListGraph<V, E> extends Graph<V, E> {
 //			}
 //		}
 //	}
-	
+
+
+// 广度优先 递归实现
+
 //	public void dfs2(V begin) {
 //		Vertex<V, E> beginVertex = vertices.get(begin);
 //		if (beginVertex == null) return;
