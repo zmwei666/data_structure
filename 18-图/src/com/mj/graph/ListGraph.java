@@ -212,6 +212,8 @@ public class ListGraph<V, E> extends Graph<V, E> {
 	/**
 	 * 深度优先搜索 会有一些节点访问不到
 	 * @param begin 起点
+	 * <br/>
+	 * <img src="https://gitee.com/codetheory/img-on1/raw/master/img01/1706509104903-2024-1-2914:18:25.png"  />
 	 */
 	@Override
 	public void dfs(V begin, VertexVisitor<V> visitor) {
@@ -219,7 +221,7 @@ public class ListGraph<V, E> extends Graph<V, E> {
 		Vertex<V, E> beginVertex = vertices.get(begin);
 		if (beginVertex == null) return;
 
-		Set<Vertex<V, E>> visitedVertices = new HashSet<>();
+		Set<Vertex<V, E>> visitedVertices = new HashSet<>();  // 存放访问过的元素
 		Stack<Vertex<V, E>> stack = new Stack<>();
 		
 		// 先访问起点
@@ -230,15 +232,16 @@ public class ListGraph<V, E> extends Graph<V, E> {
 		while (!stack.isEmpty()) {
 			Vertex<V, E> vertex = stack.pop();
 			
-			for (Edge<V, E> edge : vertex.outEdges) {
-				if (visitedVertices.contains(edge.to)) continue;
-				
+			for (Edge<V, E> edge : vertex.outEdges) {  // 访问定点的outEdges,
+				if (visitedVertices.contains(edge.to)) continue;  // 如果访问这条边, 那么就换下一条边
+
+				// 访问到这里, 说明这条边没有访问过, 那么就把这条边的from和to都放到栈里
 				stack.push(edge.from);
 				stack.push(edge.to);
 				visitedVertices.add(edge.to);
 				if (visitor.visit(edge.to.value)) return;
 				
-				break;
+				break; // 然后退出循环, 这里就是要一直沿着这条边访问到末尾, 而不是把定点的所有边全放入栈
 			}
 		}
 	}
@@ -549,6 +552,8 @@ public class ListGraph<V, E> extends Graph<V, E> {
 		return map == null ? null : map.get(to);
 	}
 
+// 广度优先 没有实现访问接口版本
+
 //	@Override
 //	public void bfs(V begin) {
 //		Vertex<V, E> beginVertex = vertices.get(begin);
@@ -571,6 +576,10 @@ public class ListGraph<V, E> extends Graph<V, E> {
 //		}
 //	}
 //
+
+
+// 深度优先 没有实现访问接口版本
+
 //	@Override
 //	public void dfs(V begin) {
 //		Vertex<V, E> beginVertex = vertices.get(begin);
@@ -599,6 +608,7 @@ public class ListGraph<V, E> extends Graph<V, E> {
 //			}
 //		}
 //	}
+
 
 
 // 广度优先 递归实现
