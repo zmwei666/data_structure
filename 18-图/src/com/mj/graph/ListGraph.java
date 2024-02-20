@@ -66,6 +66,8 @@ public class ListGraph<V, E> extends Graph<V, E> {
 	
 	private Map<V, Vertex<V, E>> vertices = new HashMap<>();
 	private Set<Edge<V, E>> edges = new HashSet<>();
+
+	// 自定义的比较规则 专门比较边的 边是 weight  写法相当于  private Comparator<Edge<V, E>> edgeComparator = new Comparator<Edge<V, E>>() { ... }
 	private Comparator<Edge<V, E>> edgeComparator = (Edge<V, E> e1, Edge<V, E> e2) -> {
 		return weightManager.compare(e1.weight, e2.weight);
 	};
@@ -285,28 +287,41 @@ public class ListGraph<V, E> extends Graph<V, E> {
 		return list;
 	}
 
+	/**
+	 * 最小生成树
+	 * @return 分别是两种算法返回
+	 */
 	@Override
 	public Set<EdgeInfo<V, E>> mst() {
 		return Math.random() > 0.5 ? prim() : kruskal();
 	}
-	
+
+
+	/**
+	 * 流程:
+	 * 就是想随便拿到一个顶点(因为是set) -> 把他放入已经切过的顶点里面(变为了绿色) -> 把他的所有的out边都放入小顶堆里面
+	 * -> 然后从小顶堆里面拿出最小的边, 放入最小边集, 相当与是选中这条边了 -> 然后再把这条边的to顶点放入已经切过的顶点里面
+	 * -> 然后再把这个to顶点的out边放入堆里面 -> 重复上面的步骤, 直到堆为空, 或者已经切过的顶点的个数等于所有顶点的个数
+	 * <br/>
+	 * <img src="https://gitee.com/codetheory/img-on1/raw/master/img01/1706585197303-2024-1-3011:26:38.png"  />
+	 */
 	private Set<EdgeInfo<V, E>> prim() {
-		Iterator<Vertex<V, E>> it = vertices.values().iterator();
+		Iterator<Vertex<V, E>> it = vertices.values().iterator();  // 所有顶点
 		if (!it.hasNext()) return null;
-		Vertex<V, E> vertex = it.next();
-		Set<EdgeInfo<V, E>> edgeInfos = new HashSet<>();
-		Set<Vertex<V, E>> addedVertices = new HashSet<>();
+		Vertex<V, E> vertex = it.next();  // 随便拿到一个顶点
+		Set<EdgeInfo<V, E>> edgeInfos = new HashSet<>();  // 存放最小边集
+		Set<Vertex<V, E>> addedVertices = new HashSet<>();  // 存放已经切过的顶点
 		addedVertices.add(vertex);
-		MinHeap<Edge<V, E>> heap = new MinHeap<>(vertex.outEdges, edgeComparator);
-		int verticesSize = vertices.size();
-		while (!heap.isEmpty() && addedVertices.size() < verticesSize) {
-			Edge<V, E> edge = heap.remove();
-			if (addedVertices.contains(edge.to)) continue;
-			edgeInfos.add(edge.info());
-			addedVertices.add(edge.to);
-			heap.addAll(edge.to.outEdges);
+		MinHeap<Edge<V, E>> heap = new MinHeap<>(vertex.outEdges, edgeComparator);  // vertex.outEdges 就是顶点 出去的边
+		int verticesSize = vertices.size();  // 循环次数 = 边的个数 = 顶点 - 1 = 已经切过的顶点个数
+		while (!heap.isEmpty() && addedVertices.size() < verticesSize) {  // 堆不为空, 并且切过的顶点的个数小于所有顶点的个数
+			Edge<V, E> edge = heap.remove();  // 拿出最小的边
+			if (addedVertices.contains(edge.to)) continue;  // 如果这条边的to顶点已经切过了, 就进入下一个循环
+			edgeInfos.add(edge.info());  // 否则, 就把这条边放入最小边集
+			addedVertices.add(edge.to);  // 把这条边的to顶点放入已经切过的顶点里面
+			heap.addAll(edge.to.outEdges);  // 把这个to顶点的out边全部放入堆里面, 但是因为这里是无向边, 所以这里的outEdges包含edge, 所以又会加一遍, 所以需要上面那个continue
 		}
-		return edgeInfos;
+		return edgeInfos;  // 返回最小边集
 	}
 	
 	private Set<EdgeInfo<V, E>> kruskal() {
