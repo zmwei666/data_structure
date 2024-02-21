@@ -64,22 +64,23 @@ public class P203_RemoveLinkedListElements{
  */
 class Solution {
     public ListNode removeElements(ListNode head, int val) {
+		while (head != null && head.val == val) {
+			head = head.next;
+		}
 		if (head == null) {
 			return null;
 		}
-
-		ListNode dummy = new ListNode(-1, head);
-		ListNode pre = dummy;
-		ListNode cur = head;
-		while (cur != null) {
-			if (cur.val == val) {
-				pre.next = cur.next;
+		ListNode curr = head.next;
+		ListNode prev = head;
+		while (curr != null) {
+			if (curr.val == val) {
+				prev.next = curr.next;
 			} else {
-				pre = cur;
+				prev = curr;
 			}
-			cur = cur.next;
+			curr = curr.next;
 		}
-		return dummy.next;
+		return head;
 
     }
 }
