@@ -48,7 +48,7 @@
 
 package leetcode.editor.cn;
 
-import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * 两数之和
@@ -73,30 +73,18 @@ public class P1_TwoSum{
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int[] twoSum(int[] nums, int target) {
-		int[] tempArray = new int[nums.length];
-		System.arraycopy(nums, 0, tempArray, 0, nums.length);
-		Arrays.sort(nums);
+		HashMap<Integer, Integer> map = new HashMap<>();
 		int[] result = new int[2];
-		int left = 0, right = nums.length - 1;
-		while (left < right) {
-			int temp = nums[left] + nums[right];
-			if ( temp < target) {
-				left++;
-			} else if (temp > target) {
-				right--;
-			} else {
+		for (int i = 0; i < nums.length; i++) {
+			int temp = target - nums[i];
+			if (map.containsKey(temp)) {
+				result[1] = i;
+				result[0] = map.get(target - nums[i]);
 				break;
 			}
+			map.put(nums[i], i);
 		}
-		boolean flag = true;
-		for (int i = 0;  i < tempArray.length; i++) {
-			if (tempArray[i] == nums[left] && flag) {
-				result[0] = i;
-				flag = false;
-			}if (tempArray[i] == nums[right]) {
-				result[1] = i;
-			}
-		}
+
 		return result;
     }
 }
