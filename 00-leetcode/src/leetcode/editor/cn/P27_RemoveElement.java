@@ -68,10 +68,10 @@ package leetcode.editor.cn;
 public class P27_RemoveElement{
 	 public static void main(String[] args) {
 	 	 Solution solution = new P27_RemoveElement().new Solution();
-//		 System.out.println(solution.removeElement(new int[]{3, 2, 2, 3}, 3));  // 2
-//		 System.out.println(solution.removeElement(new int[]{0,1,2,2,3,0,4,2}, 2));  // 5
+		 System.out.println(solution.removeElement(new int[]{3, 2, 2, 3}, 3));  // 2
+		 System.out.println(solution.removeElement(new int[]{0,1,2,2,3,0,4,2}, 2));  // 5
 		 System.out.println(solution.removeElement(new int[]{1}, 1));
-//		 System.out.println(solution.removeElement(new int[]{2,2,3}, 2));  // 1
+		 System.out.println(solution.removeElement(new int[]{2,2,3}, 2));  // 1
 	 }
 	 
 //leetcode submit region begin(Prohibit modification and deletion)
@@ -87,9 +87,7 @@ class Solution {
 		int left = 0;
 		while (left <= right) {
 			if (nums[left] == val) {
-				int temp = nums[left];
 				nums[left] = nums[right];
-				nums[right] = temp;
 				right--;
 			} else {
 				left++;
