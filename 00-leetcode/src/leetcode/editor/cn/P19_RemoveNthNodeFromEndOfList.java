@@ -45,8 +45,6 @@ package leetcode.editor.cn;
 
 import 链表.ListNode;
 
-import java.util.Stack;
-
 /**
  * 删除链表的倒数第 N 个结点
  * @author CodeTheory
@@ -55,8 +53,6 @@ import java.util.Stack;
 public class P19_RemoveNthNodeFromEndOfList{
 	 public static void main(String[] args) {
 	 	 Solution solution = new Solution();
-//		 ListNode listNode = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
-//		 ListNode listNode = new ListNode(1);
 
 		 System.out.println(solution.removeNthFromEnd(new ListNode(1, new ListNode(2)), 2));
 		 System.out.println(solution.removeNthFromEnd(new ListNode(1), 1));
@@ -77,24 +73,19 @@ public class P19_RemoveNthNodeFromEndOfList{
  */
 static class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-		if (head == null) {
-			return null;
+		ListNode dummyNode = new ListNode(-1, head);
+		ListNode slow = dummyNode, fast = dummyNode;
+		// 先走
+		for (int i = 0; i <= n; i++) {
+			fast = fast.next;
 		}
-		Stack<ListNode> stack = new Stack<>();
-		ListNode curr = head;
-		while (curr != null) {
-			stack.push(curr);
-			curr = curr.next;
+
+		while (fast != null) {
+			fast = fast.next;
+			slow = slow.next;
 		}
-		for (int i = 0; i < n; i++) {
-			stack.pop();
-		}
-		if (stack.isEmpty()) {
-			return head.next;
-		}
-		ListNode peek = stack.peek();
-		peek.next = peek.next.next;
-		return head;
+		slow.next = slow.next.next;
+		return dummyNode.next;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
