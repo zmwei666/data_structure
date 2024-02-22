@@ -74,16 +74,15 @@ package leetcode.editor.cn;
 
 import 链表.ListNode;
 
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.TreeMap; /**
+/**
  * 链表相交
  * @author CodeTheory
  * @date 2024-02-22 18:08:09
  */
-public class P面试题 02.07_IntersectionOfTwoLinkedListsLcci{
+public class P面试题_02_07_IntersectionOfTwoLinkedListsLcci {
 	 public static void main(String[] args) {
-	 	 Solution solution = new P面试题 02.07_IntersectionOfTwoLinkedListsLcci().new Solution();
+//	 	 Solution solution = new Solution();
+//		 System.out.println(solution.getIntersectionNode(ListNode.arrayToListNode(new int[]{0, 9, 1, 2, 4}), ListNode.arrayToListNode(new int[]{3, 2, 4})));
 	 }
 
 	 // 下面的类要加一个public
@@ -102,16 +101,40 @@ public class P面试题 02.07_IntersectionOfTwoLinkedListsLcci{
  */
 public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-		HashMap<ListNode, Object> map = new HashMap<>();
-		while (headA != null) {
-			map.put(headA, null);
-			headA = headA.next;
+		int headALength = 0, headBLength = 0;
+		ListNode nodeLength = headA;
+		while (nodeLength != null) {
+			headALength++;
+			nodeLength = nodeLength.next;
 		}
-		while (headB != null) {
-			if (map.containsKey(headB)) {
-				return headB;
+		nodeLength = headB;
+		while (nodeLength != null) {
+			headBLength++;
+			nodeLength = nodeLength.next;
+		}
+		ListNode longListNode, shortListNode;
+		int step = 0;
+		if (headALength > headBLength) {
+			longListNode = headA;
+			shortListNode = headB;
+			step = headALength - headBLength;
+		} else {
+			longListNode = headB;
+			shortListNode = headA;
+			step = headBLength - headALength;
+		}
+
+		// 先让长的走 step
+		for (int i = 0; i < step; i++) {
+			longListNode = longListNode.next;
+		}
+
+		while (longListNode != null) {
+			if (longListNode == shortListNode) {
+				return longListNode;
 			}
-			headB = headB.next;
+			longListNode = longListNode.next;
+			shortListNode = shortListNode.next;
 		}
 		return null;
 	}
