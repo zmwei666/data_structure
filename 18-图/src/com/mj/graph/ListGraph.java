@@ -327,16 +327,24 @@ public class ListGraph<V, E> extends Graph<V, E> {
 	private Set<EdgeInfo<V, E>> kruskal() {
 		int edgeSize = vertices.size() - 1;
 		if (edgeSize == -1) return null;
+		// 存放边的信息
 		Set<EdgeInfo<V, E>> edgeInfos = new HashSet<>();
+		// 最小堆
 		MinHeap<Edge<V, E>> heap = new MinHeap<>(edges, edgeComparator);
+		// 创建一个并查集
 		UnionFind<Vertex<V, E>> uf = new UnionFind<>();
+		// 将所有的顶点都添加到并查集中
 		vertices.forEach((V v, Vertex<V, E> vertex) -> {
 			uf.makeSet(vertex);
 		});
 		while (!heap.isEmpty() && edgeInfos.size() < edgeSize) {
-			Edge<V, E> edge = heap.remove(); 
-			if (uf.isSame(edge.from, edge.to)) continue; 
+			Edge<V, E> edge = heap.remove();
+			// 如果边的from 和 to 都在同一集合里面的话, 则说明不能链接, 否则会形成环
+			if (uf.isSame(edge.from, edge.to)) {
+                continue;
+            }
 			edgeInfos.add(edge.info());
+			// 将两个顶点归为一个集合
 			uf.union(edge.from, edge.to);
 		}
 		return edgeInfos;
