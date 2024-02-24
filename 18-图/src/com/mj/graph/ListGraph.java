@@ -323,17 +323,17 @@ public class ListGraph<V, E> extends Graph<V, E> {
 		}
 		return edgeInfos;  // 返回最小边集
 	}
-	
+	// 假设是无向的
 	private Set<EdgeInfo<V, E>> kruskal() {
 		int edgeSize = vertices.size() - 1;
-		if (edgeSize == -1) return null;
+		if (edgeSize == -1) return null;  // 如果一个顶点都没有的话，返回null
 		// 存放边的信息
 		Set<EdgeInfo<V, E>> edgeInfos = new HashSet<>();
 		// 最小堆
 		MinHeap<Edge<V, E>> heap = new MinHeap<>(edges, edgeComparator);
 		// 创建一个并查集
 		UnionFind<Vertex<V, E>> uf = new UnionFind<>();
-		// 将所有的顶点都添加到并查集中
+		// 将所有的顶点都添加到并查集中  初始化并查集 所有的顶点都单独作为一个集合
 		vertices.forEach((V v, Vertex<V, E> vertex) -> {
 			uf.makeSet(vertex);
 		});
