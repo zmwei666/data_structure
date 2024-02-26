@@ -8,7 +8,7 @@ public class Queens {
 	}
 	
 	/**
-	 * 数组索引是行号，数组元素是列号
+	 * 数组索引是行号，数组元素是列号  cols[4] = 2;  第5行的第3列摆放一个皇后
 	 */
 	int[] cols;
 	/**
@@ -28,7 +28,9 @@ public class Queens {
 	 * @param row
 	 */
 	void place(int row) {
+		// 如果已经达到最大行
 		if (row == cols.length) {
+			// 记录摆法
 			ways++;
 			show();
 			return;
@@ -44,16 +46,20 @@ public class Queens {
 	}
 	
 	/**
+	 * <img src="https://gitee.com/codetheory/img-on1/raw/master/img01/1708944023544-2024-2-2618:40:23.png"  />
+	 * <br>
 	 * 判断第row行第col列是否可以摆放皇后
 	 */
 	boolean isValid(int row, int col) {
+		// 拿到已经摆放的皇后位置 -> cols[i]
 		for (int i = 0; i < row; i++) {
-			// 第col列已经有皇后
+			// 第col列已经有皇后  竖线
 			if (cols[i] == col) {
 				System.out.println("[" + row + "][" + col + "]=false");
 				return false;
 			}
 			// 第i行的皇后跟第row行第col列格子处在同一斜线上
+			// 斜率公式 (x1 - x2) / (y1 - y2) = 1/-1
 			if (row - i == Math.abs(col - cols[i])) {
 				System.out.println("[" + row + "][" + col + "]=false");
 				return false;
