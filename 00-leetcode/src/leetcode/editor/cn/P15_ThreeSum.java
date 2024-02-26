@@ -54,6 +54,7 @@ package leetcode.editor.cn;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -65,7 +66,7 @@ public class P15_ThreeSum{
 	 public static void main(String[] args) {
 	 	 Solution solution = new P15_ThreeSum().new Solution();
 		 System.out.println(solution.threeSum(new int[]{-1, 0, 1, 2, -1, -4}));
-		 System.out.println(solution.threeSum(new int[]{0,0,0}));
+//		 System.out.println(solution.threeSum(new int[]{0,0,0}));
 	 }
 	 
 //leetcode submit region begin(Prohibit modification and deletion)
@@ -76,45 +77,38 @@ class Solution {
 	 * @return
 	 */
 	public List<List<Integer>> threeSum(int[] nums) {
-		List<List<Integer>> res = new ArrayList<>();
+		List<List<Integer>> result = new ArrayList<>();
 		Arrays.sort(nums);
-		// 找出a + b + c = 0
-		// a = nums[i], b = nums[left], c = nums[right]
-		for (int i = 0; i < nums.length; i++) {
-			// 排序之后如果第一个元素已经大于零，那么无论如何组合都不可能凑成三元组，直接返回结果就可以了
-			if (nums[i] > 0) {
-				return res;
-			}
 
-			// 确定a
+		for (int i = 0; i < nums.length; i++) {
+			// 如果第一个元素大于零，不可能凑成三元组
+			if (nums[i] > 0) {
+				return result;
+			}
+			// 三元组元素a去重
 			if (i > 0 && nums[i] == nums[i - 1]) {
 				continue;
 			}
-			int left = i + 1, right = nums.length - 1;
-			while (left < right) {
-				int sum = nums[i] + nums[left] + nums[right];
-				if (sum < 0) {
-					left++;
-				} else if (sum > 0) {
-					right--;
+
+			HashSet<Integer> set = new HashSet<>();
+			for (int j = i + 1; j < nums.length; j++) {
+				// 三元组元素b去重 			1, 1, 1的情况   当j为第三个1的时候, 就continue
+				if (j > i + 2 && nums[j] == nums[j - 1] && nums[j - 1] == nums[j - 2]) {
+					continue;
+				}
+
+				int c = -nums[i] - nums[j];
+				if (set.contains(c)) {
+					result.add(Arrays.asList(nums[i], nums[j], c));
+					set.remove(c); // 三元组元素c去重
 				} else {
-					res.add(Arrays.asList(nums[i], nums[left], nums[right]));
-
-					while (left < right && nums[left] == nums[left + 1]) {  // 去重b, 将left移动到重复元素的最后一个
-						left++;
-					}
-
-					while (left < right && nums[right] == nums[right - 1]) { // 去重a, 将right移动到重复元素的最后一个
-						right--;
-					}
-					left++;
-					right--;
+					set.add(nums[j]);
 				}
 			}
 		}
-		return res;
+		return result;
+	}
 
-    }
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
