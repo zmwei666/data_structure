@@ -1,0 +1,53 @@
+class MyStack {
+    private Queue queue1;
+    private Queue queue2;
+
+    public MyStack() {
+        queue1 = new ArrayDeque();
+        queue2 = new ArrayDeque();
+    }
+
+    public void push(int x) {
+        queue1.offer(x);
+    }
+
+    public int pop() {
+        if (queue2.size() == 1) return (int) queue2.poll();
+        while (queue1.size() != 1) {
+            queue2.offer(queue1.poll());
+        }
+        Queue temp = queue1;
+        queue1 = queue2;
+        queue2 = temp;
+        return (int) queue2.poll();
+    }
+
+    public int top() {
+        if (queue2.size() == 1) return (int) queue2.peek();
+        while (queue1.size() != 1) {
+            queue2.offer(queue1.poll());
+        }
+        int i = (int) queue1.peek();
+        queue2.offer(queue1.poll());
+        Queue temp = queue1;
+        queue1 = queue2;
+        queue2 = temp;
+        return i;
+    }
+
+    public boolean empty() {
+        return queue1.isEmpty() && queue2.isEmpty();
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+
+//runtime:0 ms
+//memory:39.2 MB

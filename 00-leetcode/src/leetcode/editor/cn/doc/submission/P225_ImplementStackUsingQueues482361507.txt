@@ -1,0 +1,44 @@
+ class MyStack {
+    private Deque<Integer> queue1;
+
+    public MyStack() {
+        queue1 = new LinkedList<>();
+    }
+
+    public void push(int x) {
+        queue1.push(x);
+    }
+
+    public int pop() {
+        rePosition();
+        return queue1.poll();
+    }
+
+    private void rePosition() {
+        int size = queue1.size();
+        while (size-- > 1) {
+            queue1.push(queue1.poll());
+        }
+    }
+
+    public int top() {
+        rePosition();
+        return queue1.peek();
+    }
+
+    public boolean empty() {
+        return queue1.isEmpty();
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+
+//runtime:0 ms
+//memory:38.8 MB
