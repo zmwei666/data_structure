@@ -60,6 +60,7 @@ public class Queens {
 			}
 			// 第i行的皇后跟第row行第col列格子处在同一斜线上
 			// 斜率公式 (x1 - x2) / (y1 - y2) = 1/-1
+			// 注意这里的循环条件, row 是大于 i 的
 			if (row - i == Math.abs(col - cols[i])) {
 				System.out.println("[" + row + "][" + col + "]=false");
 				return false;
