@@ -1,0 +1,47 @@
+    class MyQueue {
+        private final Stack<Integer> inQueue;
+        private final Stack<Integer> deQueue;
+
+        public MyQueue() {
+            inQueue = new Stack<>();
+            deQueue = new Stack<>();
+        }
+
+        public void push(int x) {
+            inQueue.push(x);
+        }
+
+        public int pop() {
+            dumpInQueue();
+            return deQueue.pop();
+        }
+
+        public int peek() {
+            dumpInQueue();
+            return deQueue.peek();
+        }
+
+        public boolean empty() {
+            return inQueue.isEmpty() && deQueue.isEmpty();
+        }
+
+        private void dumpInQueue() {
+            if (!deQueue.isEmpty()) return;
+            while (!inQueue.isEmpty()) {
+                deQueue.push(inQueue.pop());
+            }
+        }
+
+    }
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
+
+//runtime:0 ms
+//memory:39.2 MB
