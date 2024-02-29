@@ -29,8 +29,6 @@
 
 package leetcode.editor.cn;
 
-import java.util.Stack;
-
 /**
  * 删除字符串中的所有相邻重复项
  * @author CodeTheory
@@ -46,19 +44,17 @@ public class P1047_RemoveAllAdjacentDuplicatesInString{
 class Solution {
     public String removeDuplicates(String s) {
 		char[] charArray = s.toCharArray();
-		Stack<Character> stack = new Stack<>();
-		for (char c : charArray) {
-			if (stack.isEmpty() || stack.peek() != c) {
-				stack.push(c);
+		int slow = 0, fast = 0;
+		while (fast < charArray.length) {
+			charArray[slow] = charArray[fast];
+			if (slow > 0 && charArray[slow] == charArray[slow - 1]) {
+				slow--;
 			} else {
-				stack.pop();
+				slow++;
 			}
+			fast++;
 		}
-		StringBuilder sb = new StringBuilder();
-		while (!stack.isEmpty()) {
-			sb.append(stack.pop());
-		}
-		return sb.reverse().toString();
+		return new String(charArray, 0, slow);
 	}
 }
 //leetcode submit region end(Prohibit modification and deletion)
