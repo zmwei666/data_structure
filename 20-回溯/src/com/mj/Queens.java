@@ -52,6 +52,8 @@ public class Queens {
 	 */
 	boolean isValid(int row, int col) {
 		// 拿到已经摆放的皇后位置 -> cols[i]
+  // 注意这里并不会去判断row行是否摆放了元素，所以不需要还原现场
+  // 如果row行可以摆放则摆放，递归进入下一行，如果row行不能摆放，那么查看下一列是否能摆放
 		for (int i = 0; i < row; i++) {
 			// 第col列已经有皇后  竖线
 			if (cols[i] == col) {

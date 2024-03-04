@@ -61,6 +61,8 @@ public class Queens2 {
 			leftTop[ltIndex] = true;
 			rightTop[rtIndex] = true;
 			place(row + 1);
+
+   // 需要还原现场的原因是因为他采用了存储列的方式，会导致旧值还存在
 			cols[col] = false;
 			leftTop[ltIndex] = false;
 			rightTop[rtIndex] = false;
