@@ -52,31 +52,29 @@ package leetcode.editor.cn;
 public class P53_MaximumSubarray{
 	 public static void main(String[] args) {
 	 	 Solution solution = new P53_MaximumSubarray().new Solution();
-		 solution.maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4});
-		 solution.maxSubArray(new int[]{1});
+		 System.out.println(solution.maxSubArray(new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4}));
+		 System.out.println(solution.maxSubArray(new int[]{1}));
 	 }
 	 
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
-    public int maxSubArray(int[] nums) {
-		// dp[i] = dp[i - 1] + nums[i]
-		// dp[i] 为 到i为止的最大子数组和
+	public int maxSubArray(int[] nums) {
 		if (nums == null || nums.length == 0) {
 			return 0;
 		}
-		int[] dp = new int[nums.length];
-		int max = dp[0] = nums[0];
+		int prev = nums[0];
+		int max = prev;
 
 		for (int i = 1; i < nums.length; i++) {
-			if (dp[i - 1] < 0) {
-				dp[i] = nums[i];
+			if (prev < 0) {
+				prev = nums[i];
 			} else {
-				dp[i] = dp[i - 1] + nums[i];
+				prev = prev + nums[i];
 			}
-			max = Math.max(max, dp[i]);
+			max = Math.max(max, prev);
 		}
 		return max;
-    }
+	}
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
