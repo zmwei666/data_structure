@@ -62,17 +62,13 @@ class Solution {
 		if (nums == null || nums.length == 0) {
 			return 0;
 		}
-		int prev = nums[0];
-		int max = prev;
-
-		for (int i = 1; i < nums.length; i++) {
-			if (prev < 0) {
-				prev = nums[i];
-			} else {
-				prev = prev + nums[i];
-			}
-			max = Math.max(max, prev);
+		int prev = 0;
+		int max = nums[0];
+		for (int num : nums) {
+			prev = Math.max(num, prev + num);
+			max = Math.max(max,prev);
 		}
+
 		return max;
 	}
 }
