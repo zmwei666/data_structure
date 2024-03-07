@@ -38,6 +38,9 @@ package leetcode.editor.cn;
 
 import 二叉树.TreeNode;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
 /**
  * 二叉树的最大深度
  * @author CodeTheory
@@ -66,16 +69,26 @@ public class P104_MaximumDepthOfBinaryTree{
  */
 class Solution {
     public int maxDepth(TreeNode root) {
-		return maxDepth(root, 0);
-	}
-
-	private int maxDepth(TreeNode root, int depth) {
+		int max = 0;
 		if (root == null) {
-			return depth;
+			return max;
 		}
-		int leftDepth = maxDepth(root.left, depth + 1);
-		int rightDepth = maxDepth(root.right, depth + 1);
-		return Math.max(leftDepth, rightDepth);
+		Deque<TreeNode> deque = new LinkedList<>();
+		deque.offer(root);
+		while (!deque.isEmpty()) {
+			max++;
+			int size = deque.size();
+			for (int i = 0; i < size; i++) {
+				TreeNode node = deque.poll();
+				if (node.left != null) {
+					deque.offer(node.left);
+				}
+				if (node.right != null) {
+					deque.offer(node.right);
+				}
+			}
+		}
+		return max;
 
 	}
 
