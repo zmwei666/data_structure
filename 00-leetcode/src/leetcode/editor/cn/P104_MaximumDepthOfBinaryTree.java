@@ -66,14 +66,19 @@ public class P104_MaximumDepthOfBinaryTree{
  */
 class Solution {
     public int maxDepth(TreeNode root) {
-		if (root == null) {
-			return 0;
-		}
-		int leftDepth = maxDepth(root.left);
-		int rightDepth = maxDepth(root.right);
-		return Math.max(leftDepth, rightDepth) + 1;
+		return maxDepth(root, 0);
 	}
-	
+
+	private int maxDepth(TreeNode root, int depth) {
+		if (root == null) {
+			return depth;
+		}
+		int leftDepth = maxDepth(root.left, depth + 1);
+		int rightDepth = maxDepth(root.right, depth + 1);
+		return Math.max(leftDepth, rightDepth);
+
+	}
+
 }
 //leetcode submit region end(Prohibit modification and deletion)
 
