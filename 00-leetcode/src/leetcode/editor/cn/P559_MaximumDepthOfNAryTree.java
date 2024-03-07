@@ -41,6 +41,9 @@ package leetcode.editor.cn;
 
 import leetcode.editor.cn.structure.Node;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * N 叉树的最大深度
  * @author CodeTheory
@@ -76,11 +79,22 @@ class Solution {
 		if (root == null) {
 			return 0;
 		}
+		Queue<Node> queue = new LinkedList<>();
+		queue.offer(root);
 		int max = 0;
-		for (Node child : root.children) {
-			max = Math.max(max, maxDepth(child));
+		while (!queue.isEmpty()) {
+			max++;
+			int size = queue.size();
+			for (int i = 0; i < size; i++) {
+				Node node = queue.poll();
+				for (Node child : node.children) {
+					if (child != null) {
+						queue.offer(child);
+					}
+				}
+			}
 		}
-		return max + 1;
+		return max;
 	}
 }
 //leetcode submit region end(Prohibit modification and deletion)
