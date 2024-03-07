@@ -76,14 +76,10 @@ class Solution {
 		while (!queue.isEmpty()) {
 			TreeNode left = queue.poll();
 			TreeNode right = queue.poll();
-
-			if ((left != null && right == null) || (left == null && right != null)) {
-				return false;
-			}
 			if (left == null && right == null) {
 				continue;
 			}
-			if (left.val != right.val) {
+			if (left == null || right == null || left.val != right.val) {
 				return false;
 			}
 			queue.offer(left.left);
