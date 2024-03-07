@@ -36,7 +36,8 @@ package leetcode.editor.cn;
 
 import 二叉树.TreeNode;
 
-import java.util.Stack;
+import java.util.Deque;
+import java.util.LinkedList;
 
 /**
  * 对称二叉树
@@ -69,23 +70,22 @@ class Solution {
 		if (root == null) {
 			return false;
 		}
-		Stack<TreeNode> stack = new Stack<>();
-		stack.push(root.right);
-		stack.push(root.left);
-		while (!stack.isEmpty()) {
-			TreeNode left = stack.pop();
-			TreeNode right = stack.pop();
-
-			if (left == null && right == null) {
+		Deque<TreeNode> deque = new LinkedList<>();
+		deque.offerFirst(root.left);
+		deque.offerLast(root.right);
+		while (!deque.isEmpty()) {
+			TreeNode leftNode = deque.pollFirst();
+			TreeNode rightNode = deque.pollLast();
+			if (leftNode == null && rightNode == null) {
 				continue;
 			}
-			if (left == null || right == null || left.val != right.val) {
+			if (leftNode == null || rightNode == null || leftNode.val != rightNode.val) {
 				return false;
 			}
-			stack.push(right.left);
-			stack.push(left.right);
-			stack.push(right.right);
-			stack.push(left.left);
+			deque.offerFirst(leftNode.left);
+			deque.offerFirst(leftNode.right);
+			deque.offerLast(rightNode.right);
+			deque.offerLast(rightNode.left);
 		}
 		return true;
 	}
