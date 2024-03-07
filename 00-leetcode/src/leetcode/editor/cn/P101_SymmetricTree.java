@@ -36,6 +36,9 @@ package leetcode.editor.cn;
 
 import 二叉树.TreeNode;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * 对称二叉树
  * @author CodeTheory
@@ -64,23 +67,33 @@ public class P101_SymmetricTree{
  */
 class Solution {
     public boolean isSymmetric(TreeNode root) {
-		return isSymmetric(root.left,root.right);
-	}
-
-	private boolean isSymmetric(TreeNode left, TreeNode right) {
-		if ((left == null && right != null) || (left != null && right == null)) {
+		if (root == null) {
 			return false;
 		}
-		if (left == null && right == null) {
-			return true;
-		}
-		if (left.val != right.val) {
-			return false;
+		Queue<TreeNode> queue = new LinkedList<>();
+		queue.offer(root.left);
+		queue.offer(root.right);
+		while (!queue.isEmpty()) {
+			TreeNode left = queue.poll();
+			TreeNode right = queue.poll();
+
+			if ((left != null && right == null) || (left == null && right != null)) {
+				return false;
+			}
+			if (left == null && right == null) {
+				continue;
+			}
+			if (left.val != right.val) {
+				return false;
+			}
+			queue.offer(left.left);
+			queue.offer(right.right);
+			queue.offer(left.right);
+			queue.offer(right.left);
 		}
 
-		boolean outResult = isSymmetric(left.left, right.right);
-		boolean inResult = isSymmetric(left.right, right.left);
-		return outResult && inResult;
+		return true;
+
 	}
 }
 //leetcode submit region end(Prohibit modification and deletion)
