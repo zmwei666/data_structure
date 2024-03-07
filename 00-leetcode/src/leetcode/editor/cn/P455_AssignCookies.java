@@ -59,15 +59,12 @@ class Solution {
     public int findContentChildren(int[] g, int[] s) {
 		Arrays.sort(g);
 		Arrays.sort(s);
-		// 孩子的胃口
 		int max = 0;
-		for (int i = 0,j = 0; i < g.length && j < s.length; i++) {
-			if (g[i] <= s[j]) {
+		for (int i = 0, j = 0; i < s.length && j < g.length; i++) {
+			if (g[j] <= s[i]) {
 				max++;
-			} else {
-				i--;
+				j++;
 			}
-			j++;
 		}
 		return max;
 
