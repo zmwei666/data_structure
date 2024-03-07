@@ -36,8 +36,7 @@ package leetcode.editor.cn;
 
 import 二叉树.TreeNode;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
 /**
  * 对称二叉树
@@ -70,26 +69,25 @@ class Solution {
 		if (root == null) {
 			return false;
 		}
-		Queue<TreeNode> queue = new LinkedList<>();
-		queue.offer(root.left);
-		queue.offer(root.right);
-		while (!queue.isEmpty()) {
-			TreeNode left = queue.poll();
-			TreeNode right = queue.poll();
+		Stack<TreeNode> stack = new Stack<>();
+		stack.push(root.right);
+		stack.push(root.left);
+		while (!stack.isEmpty()) {
+			TreeNode left = stack.pop();
+			TreeNode right = stack.pop();
+
 			if (left == null && right == null) {
 				continue;
 			}
 			if (left == null || right == null || left.val != right.val) {
 				return false;
 			}
-			queue.offer(left.left);
-			queue.offer(right.right);
-			queue.offer(left.right);
-			queue.offer(right.left);
+			stack.push(right.left);
+			stack.push(left.right);
+			stack.push(right.right);
+			stack.push(left.left);
 		}
-
 		return true;
-
 	}
 }
 //leetcode submit region end(Prohibit modification and deletion)
